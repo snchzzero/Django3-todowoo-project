@@ -1,0 +1,19 @@
+{% extends 'todo/base.html' %} <!-- привязка ранее созданного шаблона -->
+
+{% block content %}
+
+<h1>Create</h1>
+
+<h2> {{ error }} </h2>
+
+<form method="POST">
+    <!-- метод Get отображается в сылке -->
+    <!-- метод POST скрывает данные и использует на текущей странице -->
+
+    {% csrf_token %}  <!-- скрытый элемент -->
+    <!-- {{ form }}   - простая форма  -->
+    {{ form.as_p }}  <!-- as_p - разделяем форму по смыслу -->
+    <button type="submit">Create</button>
+</form>
+
+{% endblock %}

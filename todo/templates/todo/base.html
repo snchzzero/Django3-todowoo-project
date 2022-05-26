@@ -1,0 +1,24 @@
+<!-- Определяем ли был ранее зарегистрирован пользователя -->
+{% if user.is_authenticated %}
+
+Logged In as {{ user.username }}
+
+ <!-- выйти из профиля -->
+<form action="{% url 'logoutuser' %}" method="POST">
+    {% csrf_token %}  <!-- скрытый элемент -->
+    <button type="submit">Logout</button>
+</form>
+
+{% else %}
+
+<a href="{% url 'signupuser' %}">Sign Up</a> <!-- зарегистрироваться -->
+<a href="{% url 'loginuser' %}">Login</a> <!-- войти в ранее созданный профиль -->
+
+{% endif %} <!-- закрытие функции -->
+<br>
+<br>
+
+<!-- Блок контента -->
+{% block content %}
+
+{% endblock %}
