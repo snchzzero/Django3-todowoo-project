@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect  # redirect - для перенаправления зарегистрированного пользователя
+from django.shortcuts import render, redirect, get_object_or_404
+# redirect - для перенаправления зарегистрированного пользователя, get_object_or_404 - для нахождения записи по ключу
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm  # импорт шаблонов форм для регистрации юзеров,
 # AuthenticationForm - для login входа по созданному аккаунту
 from django.contrib.auth.models import User  # модель пользователя
@@ -79,3 +80,23 @@ def currenttodos(request):
     # datecompleted__isnull=True - проверка поля, что оно пустое
 
     return render(request, 'todo/currenttodos.html', {'todos': todos})
+
+def viewtodo(request, todo_pk):
+    # условие по которому находить будем нужную нам запись по ее ключу
+    # user=request.user система сверяет автора,
+    # если запись будет пренадлежать не текущему пользователю, то выскочить ошибка 404
+    todo =get_object_or_404(Todo, pk=todo_pk, user=request.user)
+
+    if request.method == 'GET':
+        #для редактирования уже имеющийся заметки, записи
+        form = TodoForm(instance=todo)  # instance=1todo - уточняем, что изменяем уже существующий объект
+        return render(request, 'todo/viewtodo.html', {'todo': todo, 'form': form})
+    else: # для сохранения отредактированой записи (заметки)
+        try:
+            form = TodoForm(request.POST, instance=todo)
+            # соединить внесенную информацию с нашей формой, instance=1todo - уточняем, что изменяем уже существующий объект
+            form.save()
+            return redirect('currenttodos')  # перенаправить пользователя на список записей
+        except ValueError:
+            return render(request, 'todo/viewtodo.html', {'todo': todo, 'form': form, 'error': 'Bad info'})
+

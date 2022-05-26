@@ -1,0 +1,15 @@
+{% extends 'todo/base.html' %} <!-- привязка ранее созданного шаблона -->
+
+{% block content %}
+
+<h2> {{ error }} </h2>
+
+{{ todo.title }}  <!-- отображение списка записей -->
+
+<form method="POST">
+    {% csrf_token %}  <!-- скрытый элемент -->
+    {{ form.as_p }}<!-- отображение формы редактирования существующей записи -->
+    <button type="submit">Save</button>
+</form>
+
+{% endblock %}
