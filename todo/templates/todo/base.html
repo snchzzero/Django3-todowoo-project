@@ -3,6 +3,10 @@
 
 Logged In as {{ user.username }}
 
+<a href="{% url 'createtodo' %}">Create</a>
+<a href="{% url 'currenttodos' %}">Current</a>
+<a href="{% url 'completedtodos' %}">Completed</a>
+
  <!-- выйти из профиля -->
 <form action="{% url 'logoutuser' %}" method="POST">
     {% csrf_token %}  <!-- скрытый элемент -->

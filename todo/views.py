@@ -8,6 +8,8 @@ from  django.contrib.auth import login, logout, authenticate  # после то�
 # logout - для выхода из аккаунта, authenticate - проверка логина и пароля при входе пользователя
 from .forms import TodoForm  # импортируем нашу форму для страницы создания задач пользователя createtodo
 from .models import Todo  # импортируем модель туду
+from django.utils import timezone  # для подстановки времени завершения задачи
+from django.contrib.auth.decorators import login_required  # только зарегистрированные пользователи имеют доступ к определенным страницам
 
 def home(request):
     return render(request, 'todo/home.html')
@@ -48,6 +50,7 @@ def loginuser(request):
             login(request, user)
             return redirect('currenttodos')  # перенаправление на url currenttodos
 
+@login_required
 def logoutuser(request):
     # что бы автоматически не выполнялся выход из аккаунта (многие браузеры прогружают все сылки на странице)
     # выполняем проверку на принадлежность к POST
@@ -55,6 +58,7 @@ def logoutuser(request):
         logout(request)
         return redirect('home')
 
+@login_required
 def createtodo(request):
     if request.method == 'GET':
         return render(request, 'todo/createtodo.html', {'form': TodoForm()})
@@ -73,6 +77,7 @@ def createtodo(request):
             # переданы неверные данные. попробуйте еще раз
 
 # функция отображения всех созданых пользователем дел или задач
+@login_required
 def currenttodos(request):
     #todos =Todo000.objects.all()  # пользователь видит все записи созданные всеми пользователями
     todos = Todo.objects.filter(user=request.user, datecompleted__isnull=True)
@@ -81,6 +86,16 @@ def currenttodos(request):
 
     return render(request, 'todo/currenttodos.html', {'todos': todos})
 
+@login_required
+def completedtodos(request):
+    #todos =Todo000.objects.all()  # пользователь видит все записи созданные всеми пользователями
+    todos = Todo.objects.filter(user=request.user, datecompleted__isnull=False).order_by('datecompleted')
+    # проверка соответствия записи к конкретному пользователю
+    # datecompleted__isnull=True - проверка поля, что оно пустое или не пустое
+    # order_by('-datecompleted') - сортировка по дате выполнения (- переде dateco... обознач-т обратный хронолог-й порядок)
+    return render(request, 'todo/completedtodos.html', {'todos': todos})
+
+@login_required
 def viewtodo(request, todo_pk):
     # условие по которому находить будем нужную нам запись по ее ключу
     # user=request.user система сверяет автора,
@@ -100,3 +115,19 @@ def viewtodo(request, todo_pk):
         except ValueError:
             return render(request, 'todo/viewtodo.html', {'todo': todo, 'form': form, 'error': 'Bad info'})
 
+@login_required
+def completetodo(request, todo_pk):  # завершать задачу может только тот пользователь, к-ый создавал ее
+    todo =get_object_or_404(Todo, pk=todo_pk, user=request.user)
+    if request.method == 'POST':
+        todo.datecompleted = timezone.now()
+        # присвоем текущее время, а если в этом поле появляется время, то значит задача становится выполненой
+
+        todo.save()
+        return redirect('currenttodos')  # перенаправить пользователя на список записей
+
+@login_required
+def deletetodo(request, todo_pk):  # удалить задачу может только тот пользователь, к-ый создавал ее
+    todo =get_object_or_404(Todo, pk=todo_pk, user=request.user)
+    if request.method == 'POST':
+        todo.delete()
+        return redirect('currenttodos')  # перенаправить пользователя на список записей

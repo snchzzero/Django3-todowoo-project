@@ -27,8 +27,11 @@ urlpatterns = [
 
     # todos
     path('', views.home, name='home'),
-    path('current/', views.currenttodos, name='currenttodos'),
+    path('current/', views.currenttodos, name='currenttodos'),  # отображение всех созданых пользователем дел или задач
+    path('completed/', views.completedtodos, name='completedtodos'),  # просмотр завершенных задач
     path('create/', views.createtodo, name='createtodo'),  # страница создания задач
-    path('todo/<int:todo_pk>', views.viewtodo, name='viewtodo')
+    path('todo/<int:todo_pk>', views.viewtodo, name='viewtodo'),
+    path('todo/<int:todo_pk>/complete', views.completetodo, name='completetodo'),
+    path('todo/<int:todo_pk>/delete', views.deletetodo, name='deletetodo')
 
 ]

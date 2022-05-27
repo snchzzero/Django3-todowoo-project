@@ -1,0 +1,24 @@
+{% extends 'todo/base.html' %} <!-- привязка ранее созданного шаблона -->
+
+{% block content %}
+
+<h1>Сompleted</h1>
+
+<ul>
+    {% for todo in todos %}
+
+    <li>
+        <a href="{% url 'viewtodo' todo.id %}">  <!-- клибальная запись с параметром 1todo.id -->
+            {% if todo.important %} <b> {% endif %}<!-- если задача с пометкой важно, то ставим тэг <b> -->
+            {{ todo.title }}
+            {% if todo.important %} </b> {% endif %}<!-- если задача с пометкой важно, то ставим тэг </>b> -->
+            {% if todo.memo %} - {{ todo.memo }} {% endif %} <!-- проверяем есть ли описание, если есть до добавляем -->
+            {{ todo.datecompleted|date:'M j Y H:i' }} <!-- отображение даты и времени завершения задачи -->
+        </a>
+    </li>
+
+    {% endfor %}  <!-- завершаем команду цикла -->
+</ul>
+
+
+{% endblock %}
