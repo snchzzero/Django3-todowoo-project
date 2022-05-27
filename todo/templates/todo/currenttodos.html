@@ -2,22 +2,72 @@
 
 {% block content %}
 
-<h1>Current</h1>
 
-<ul>
-    {% for todo in todos %}
 
-    <li>
-        <a href="{% url 'viewtodo' todo.id %}">  <!-- клибальная запись с параметром 1todo.id -->
-            {% if todo.important %} <b> {% endif %}<!-- если задача с пометкой важно, то ставим тэг <b> -->
-            {{ todo.title }}
-            {% if todo.important %} </b> {% endif %}<!-- если задача с пометкой важно, то ставим тэг </>b> -->
-            {% if todo.memo %} - {{ todo.memo }} {% endif %} <!-- проверяем есть ли описание, если есть до добавляем -->
-        </a>
-    </li>
+<!--<ul>-->
+<!--    {% for 1todo in todos %}-->
 
-    {% endfor %}  <!-- завершаем команду цикла -->
-</ul>
+<!--    <li>-->
+<!--        <a href="{% url 'viewtodo' 1todo.id %}">  &lt;!&ndash; клибальная запись с параметром 1todo.id &ndash;&gt;-->
+<!--            {% if 1todo.important %} <b> {% endif %}&lt;!&ndash; если задача с пометкой важно, то ставим тэг <b> &ndash;&gt;-->
+<!--            {{ 1todo.title }}-->
+<!--            {% if 1todo.important %} </b> {% endif %}&lt;!&ndash; если задача с пометкой важно, то ставим тэг </>b> &ndash;&gt;-->
+<!--            {% if 1todo.memo %} - {{ 1todo.memo }} {% endif %} &lt;!&ndash; проверяем есть ли описание, если есть до добавляем &ndash;&gt;-->
+<!--        </a>-->
+<!--    </li>-->
+
+<!--    {% endfor %}  &lt;!&ndash; завершаем команду цикла &ndash;&gt;-->
+<!--</ul>-->
+
+
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-10">
+            {% if todos %}
+                 <!--<h1>{{ todos.count }}  Доступные задачи{{ todos.count|pluralize }}</h1>-->
+                <h1>Доступные задачи</h1>
+
+                всего({{ todos.count }})
+            {% else %}
+                           <h1>Доступные задачи</h1>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-10">
+        {% if todos %}
+            <div class="list-group">
+                {% for todo in todos %}
+                    <!-- клибальная запись с параметром 1todo.id -->
+                    <!-- если задача с пометкой важно, то ставим item-danger -->
+                    <!-- проверяем есть ли описание, если есть до добавляем -->
+                    <a href="{% url 'viewtodo' todo.id %}"
+                       class="list-group-item list-group-item-action
+                       {% if todo.important %} list-group-item-danger{% endif %}">
+                        <b>{{ todo.title }}</b>
+                        {% if todo.memo %} - {{ todo.memo|truncatechars:30 }}{% endif %}
+                    </a>
+                {% endfor %} <!-- завершаем команду цикла -->
+            </div>
+        {% else %}
+            <div class="text-center">
+                <h2>Похоже, у Вас нет задач! Вы хорошо поработали!</h2>
+            <br>
+            <a role="button" class="btn btn-primary" href="{% url 'createtodo' %}">Новая задача</a>
+            </div>
+        {% endif %}
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
 
 
 {% endblock %}

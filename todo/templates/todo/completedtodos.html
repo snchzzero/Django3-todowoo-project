@@ -2,23 +2,44 @@
 
 {% block content %}
 
-<h1>Сompleted</h1>
+<!--    {% for 1todo in todos %}-->
 
-<ul>
-    {% for todo in todos %}
+<!--    <li>-->
+<!--        <a href="{% url 'viewtodo' 1todo.id %}">  &lt;!&ndash; клибальная запись с параметром 1todo.id &ndash;&gt;-->
+<!--            {% if 1todo.important %} <b> {% endif %}&lt;!&ndash; если задача с пометкой важно, то ставим тэг <b> &ndash;&gt;-->
+<!--            {{ 1todo.title }}-->
+<!--            {% if 1todo.important %} </b> {% endif %}&lt;!&ndash; если задача с пометкой важно, то ставим тэг </>b> &ndash;&gt;-->
+<!--            {% if 1todo.memo %} - {{ 1todo.memo }} {% endif %} &lt;!&ndash; проверяем есть ли описание, если есть до добавляем &ndash;&gt;-->
+<!--            {{ 1todo.datecompleted|date:'M j Y H:i' }} &lt;!&ndash; отображение даты и времени завершения задачи &ndash;&gt;-->
+<!--        </a>-->
+<!--    </li>-->
 
-    <li>
-        <a href="{% url 'viewtodo' todo.id %}">  <!-- клибальная запись с параметром 1todo.id -->
-            {% if todo.important %} <b> {% endif %}<!-- если задача с пометкой важно, то ставим тэг <b> -->
-            {{ todo.title }}
-            {% if todo.important %} </b> {% endif %}<!-- если задача с пометкой важно, то ставим тэг </>b> -->
-            {% if todo.memo %} - {{ todo.memo }} {% endif %} <!-- проверяем есть ли описание, если есть до добавляем -->
-            {{ todo.datecompleted|date:'M j Y H:i' }} <!-- отображение даты и времени завершения задачи -->
-        </a>
-    </li>
+<!--    {% endfor %}  &lt;!&ndash; завершаем команду цикла &ndash;&gt;-->
 
-    {% endfor %}  <!-- завершаем команду цикла -->
-</ul>
+
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-10">
+            <h1>Завершенные задачи</h1>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-10">
+            <div class="list-group">
+                {% for todo in todos %}
+                    <!-- клибальная запись с параметром 1todo.id -->
+                    <a href="{% url 'viewtodo' todo.id %}"
+                       class="list-group-item list-group-item-action{% if todo.important %}
+                       list-group-item-danger{% endif %}"><b>{{ todo.title }}</b>
+                        - Completed {{ todo.datecompleted|date:'M j Y H:i' }}</a>
+                    <!-- если задача с пометкой важно, то ставим тэг </>b> -->
+                    <!-- отображение даты и времени завершения задачи -->
+                {% endfor %} <!-- завершаем команду цикла -->
+            </div>
+        </div>
+    </div>
+
+
+
 
 
 {% endblock %}

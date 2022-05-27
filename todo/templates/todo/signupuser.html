@@ -1,19 +1,53 @@
 {% extends 'todo/base.html' %} <!-- привязка ранее созданного шаблона -->
 
-{% block content %}
-
-<h1>Sign Up</h1>
-
-<h2> {{ error }} </h2>
-
-<form method="POST">
     <!-- метод Get отображается в сылке -->
     <!-- метод POST скрывает данные и использует на текущей странице -->
 
-    {% csrf_token %}  <!-- скрытый элемент -->
+    <!--{% csrf_token %}-->  <!-- скрытый элемент -->
     <!-- {{ form }}   - простая форма  -->
-    {{ form.as_p }}  <!-- as_p - разделяем форму по смыслу -->
-    <button type="submit">Sign Up</button>
-</form>
+    <!-- {{ form.as_p }}-->  <!-- as_p - разделяем форму по смыслу -->
 
+
+
+
+
+
+{% block content %}
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-5">
+            <h2>Присоединиться</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-5">
+            {% if error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endif %}
+            <form method="POST">
+                <!-- метод Get отображается в сылке -->
+                <!-- метод POST скрывает данные и использует на текущей странице -->
+                {% csrf_token %} <!-- скрытый элемент -->
+                <div class="form-group"> <!-- {{ form }}   - простая форма  -->
+                    <label for="username">Имя пользователя</label>
+                    <input type="text" name="username" class="form-control" id="username" aria-describedby="usernameHelp">
+                    <small id="usernameHelp" class="form-text text-muted">Ваше имя пользователя должно быть уникальным. Мы сообщим вам, если выбранное имя будет занято.</small>
+                </div>
+                <div class="form-group">
+                    <label for="password1">Пароль</label>
+                    <input type="password" name="password1" class="form-control" id="password1">
+                </div>
+                <div class="form-group">
+                    <label for="password2">Подтвердите пароль</label>
+                    <input type="password" name="password2" class="form-control" id="password2">
+                </div>
+                <button type="submit" class="btn btn-primary">Регистрация</button>
+            </form>
+            <hr>
+            <div class="text-center">
+                У вас уже есть аккаунт? <a href="{% url 'loginuser' %}">Войти</a>
+            </div>
+        </div>
+    </div>
 {% endblock %}

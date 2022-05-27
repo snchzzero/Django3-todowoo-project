@@ -2,18 +2,62 @@
 
 {% block content %}
 
-<h1>Create</h1>
+<!--<h1>Create</h1>-->
 
-<h2> {{ error }} </h2>
+<!--<h2> {{ error }} </h2>-->
 
-<form method="POST">
-    <!-- метод Get отображается в сылке -->
-    <!-- метод POST скрывает данные и использует на текущей странице -->
+<!--<form method="POST">-->
+<!--    &lt;!&ndash; метод Get отображается в сылке &ndash;&gt;-->
+<!--    &lt;!&ndash; метод POST скрывает данные и использует на текущей странице &ndash;&gt;-->
 
-    {% csrf_token %}  <!-- скрытый элемент -->
-    <!-- {{ form }}   - простая форма  -->
-    {{ form.as_p }}  <!-- as_p - разделяем форму по смыслу -->
-    <button type="submit">Create</button>
-</form>
+<!--    {% csrf_token %}  &lt;!&ndash; скрытый элемент &ndash;&gt;-->
+<!--    &lt;!&ndash; {{ form }}   - простая форма  &ndash;&gt;-->
+<!--    {{ form.as_p }}  &lt;!&ndash; as_p - разделяем форму по смыслу &ndash;&gt;-->
+<!--    <button type="submit">Create</button>-->
+<!--</form>-->
+
+
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-5">
+            <h2>Новая задача</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-5">
+            {% if error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endif %}
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="title">Название</label>
+                    <input type="text" name="title" class="form-control" id="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="memo">Описание</label>
+                    <textarea name="memo" class="form-control" id="memo" ></textarea>
+                </div>
+                <div class="form-group form-check">
+                    <input type="checkbox" name="important" class="form-check-input" id="important">
+                    <label class="form-check-label" for="important">Важность</label>
+                </div>
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+            </form>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
 
 {% endblock %}
